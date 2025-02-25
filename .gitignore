@@ -1,0 +1,9 @@
+# Ignore Flutter & Dart build files
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+build/
+
+# Ignore pubspec.lock (optional if you don't want to track it)
+pubspec.lock
+
