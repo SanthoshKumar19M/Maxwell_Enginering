@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/employee_model.dart';
+import '../../models/employee_model.dart';
 
 class EmployeeCreateView extends StatefulWidget {
   @override

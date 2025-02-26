@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:maxwellengineering/views/productdetails.dart';
+import 'package:maxwellengineering/views/products/productdetails.dart';
 
 class AddProduct extends StatefulWidget {
   AddProduct({
