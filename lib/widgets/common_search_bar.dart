@@ -7,12 +7,12 @@ class CommonSearchBar extends StatelessWidget {
   final bool readOnly;
 
   const CommonSearchBar({
-    Key? key,
+    super.key,
     this.hintText = "Type your requirement here . . .",
     this.onSearchChanged,
     this.onTap,
     this.readOnly = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

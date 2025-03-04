@@ -7,10 +7,10 @@ class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
   @override
-  _DashboardScreenState createState() => _DashboardScreenState();
+  DashboardScreenState createState() => DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,14 +62,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
               leading: const Icon(Icons.home),
               title: const Text("Employee"),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => EmployeeCreateView()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const EmployeeCreateView()));
               },
             ),
             ListTile(
               leading: const Icon(Icons.home),
               title: const Text("Employee View"),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => EmployeeListScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const EmployeeListScreen()));
               },
             ),
           ],

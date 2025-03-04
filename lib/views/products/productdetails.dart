@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -42,7 +43,9 @@ class _ProductsState extends State<Products> {
 
   Future<void> deleteProduct(String docId) async {
     await _firestore.collection('products').doc(docId).delete();
-    print("product deleted: $docId");
+    if (kDebugMode) {
+      print("product deleted: $docId");
+    }
     setState(() {
       // SnackBarFunction().snackBarFunc("Product deleted successfully", context);
     });
@@ -50,7 +53,9 @@ class _ProductsState extends State<Products> {
 
   Future<void> updateProduct(String docId, Map<String, dynamic> newData) async {
     await _firestore.collection('products').doc(docId).update(newData);
-    print("product updated: $docId");
+    if (kDebugMode) {
+      print("product updated: $docId");
+    }
     setState(() {
       // SnackBarFunction().snackBarFunc("Product updated successfully", context);
     });
@@ -110,7 +115,7 @@ class _ProductsState extends State<Products> {
                     ),
                     controller: mrp,
                     textAlign: TextAlign.start,
-                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')), // Allows double values
                     ],
@@ -132,7 +137,7 @@ class _ProductsState extends State<Products> {
                     ),
                     controller: sellingPrice,
                     textAlign: TextAlign.start,
-                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')), // Allows double values
                     ],
@@ -241,7 +246,7 @@ class _ProductsState extends State<Products> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Search TextField
-          Container(
+          SizedBox(
             height: 70,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -448,7 +453,7 @@ class _ProductsState extends State<Products> {
                           },
                         ),
                       )
-                    : Container(
+                    : SizedBox(
                         width: MediaQuery.of(context).size.width,
                         child: DataTable(
                           columns: const [
@@ -575,7 +580,6 @@ class _ProductsState extends State<Products> {
                           }).toList(),
                           dividerThickness: 1,
                           headingRowColor: WidgetStateProperty.all(Colors.blue.shade100),
-                          dataRowHeight: 60,
                           headingTextStyle: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,

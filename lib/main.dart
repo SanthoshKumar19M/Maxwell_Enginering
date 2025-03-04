@@ -69,15 +69,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    FirebaseFirestore.instance.collection('test').add({'message': 'Firebase connected!'});
-  }
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     checkLoginStatus();
   }
@@ -103,6 +96,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return login ? DashboardScreen() : LoginScreen();
+    return login ? const DashboardScreen() : const LoginScreen();
   }
 }

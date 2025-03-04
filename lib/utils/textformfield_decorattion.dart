@@ -15,21 +15,21 @@ class InputDecorations {
       suffixIcon: suffixIcon,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
-        borderSide: BorderSide(color: AppTheme.primaryColor),
+        borderSide: const BorderSide(color: AppTheme.primaryColor),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
-        borderSide: BorderSide(color: Colors.blue, width: 2.0),
+        borderSide: const BorderSide(color: Colors.blue, width: 2.0),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
-        borderSide: BorderSide(color: AppTheme.primaryColor),
+        borderSide: const BorderSide(color: AppTheme.primaryColor),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
-        borderSide: BorderSide(color: AppTheme.errorColor),
+        borderSide: const BorderSide(color: AppTheme.errorColor),
       ),
-      contentPadding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+      contentPadding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
     );
   }
 }

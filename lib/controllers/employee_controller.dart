@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:maxwellengineering/models/employee_model.dart';
 
@@ -32,7 +33,9 @@ class EmployeeController {
         return Employee.fromMap(doc.data() as Map<String, dynamic>);
       }
     } catch (e) {
-      print('Error fetching employee: $e');
+      if (kDebugMode) {
+        print('Error fetching employee: $e');
+      }
     }
     return null;
   }
@@ -43,7 +46,9 @@ class EmployeeController {
       QuerySnapshot snapshot = await _employeeCollection.get();
       return snapshot.docs.map((doc) => Employee.fromMap(doc.data() as Map<String, dynamic>)).toList();
     } catch (e) {
-      print('Error fetching employees: $e');
+      if (kDebugMode) {
+        print('Error fetching employees: $e');
+      }
       return [];
     }
   }
@@ -53,7 +58,9 @@ class EmployeeController {
     try {
       await _employeeCollection.doc(employeeId).delete();
     } catch (e) {
-      print('Error deleting employee: $e');
+      if (kDebugMode) {
+        print('Error deleting employee: $e');
+      }
     }
   }
 }

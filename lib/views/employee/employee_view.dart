@@ -6,10 +6,10 @@ class EmployeeListScreen extends StatefulWidget {
   const EmployeeListScreen({Key? key}) : super(key: key);
 
   @override
-  _EmployeeListScreenState createState() => _EmployeeListScreenState();
+  EmployeeListScreenState createState() => EmployeeListScreenState();
 }
 
-class _EmployeeListScreenState extends State<EmployeeListScreen> {
+class EmployeeListScreenState extends State<EmployeeListScreen> {
   late Future<List<Employee>> _employeesFuture;
 
   @override

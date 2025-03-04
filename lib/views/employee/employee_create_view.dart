@@ -9,10 +9,10 @@ class EmployeeCreateView extends StatefulWidget {
   const EmployeeCreateView({super.key});
 
   @override
-  _EmployeeCreateViewState createState() => _EmployeeCreateViewState();
+  EmployeeCreateViewState createState() => EmployeeCreateViewState();
 }
 
-class _EmployeeCreateViewState extends State<EmployeeCreateView> {
+class EmployeeCreateViewState extends State<EmployeeCreateView> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _employeeIdController = TextEditingController();
