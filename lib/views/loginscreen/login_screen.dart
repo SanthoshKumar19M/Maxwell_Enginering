@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:maxwellengineering/views/products/addproducts.dart';
 
+import '../../utils/share_preferences_helper.dart';
 import '../dashboard/dashboard.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -61,19 +62,19 @@ class _LoginScreenState extends State<LoginScreen> {
       isLoading = true;
     });
     // Trim email and password inputs
-    final email = userNameController.text.trim();
+    final userName = userNameController.text.trim();
     final password = passwordController.text.trim();
 
-    // Check if email and password are not empty
-    if (email.isEmpty || password.isEmpty) {
-      print("Email and password must not be empty");
+    // Check if userName and password are not empty
+    if (userName.isEmpty || password.isEmpty) {
+      print("userName and password must not be empty");
       return setState(() {});
     }
 
     try {
       // Attempt to sign in with email and password
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
+        email: userName,
         password: password,
       );
 
@@ -85,14 +86,10 @@ class _LoginScreenState extends State<LoginScreen> {
         // Store token securely
         await _storage.write(key: 'auth_token', value: token);
         print("Login successful. Token stored securely.");
+        SharedPrefsHelper.saveLoginInfo(userName, password);
         setState(() {});
         storeUserLoginDetails();
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AddProduct(
-                      close: () {},
-                    )));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardScreen()));
         setState(() {
           isLoading = false;
         });
@@ -153,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             if (isLoading) const Center(child: CircularProgressIndicator()),
             if (!isLoading)
-              Container(
+              SizedBox(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 child: Padding(
@@ -255,7 +252,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Container(
+                                        SizedBox(
                                           height: 60,
                                           child: ElevatedButton(
                                             onPressed: () {

@@ -5,6 +5,7 @@ class AppTheme {
   static const Color primaryColor = Color.fromARGB(255, 110, 84, 146);
   static const Color secondaryColor = Color(0xFF03DAC5);
   static const Color backgroundColor = Color(0xFFF5F5F5);
+  static const Color errorColor = Colors.red;
 
   // Light Theme
   static final ThemeData lightTheme = ThemeData(
