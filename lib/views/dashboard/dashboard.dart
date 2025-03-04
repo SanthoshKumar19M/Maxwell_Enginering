@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maxwellengineering/views/employee/employee_view.dart';
+import 'package:maxwellengineering/views/vendor/vendor_create_view.dart';
+import 'package:maxwellengineering/views/vendor/vendor_view.dart';
 
 import '../employee/employee_create_view.dart';
 
@@ -70,6 +72,20 @@ class DashboardScreenState extends State<DashboardScreen> {
               title: const Text("Employee View"),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const EmployeeListScreen()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text("Vendor"),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const VendorCreation()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text("Vendor View"),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const VendorListScreen()));
               },
             ),
           ],
