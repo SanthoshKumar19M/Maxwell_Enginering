@@ -2,10 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:maxwellengineering/views/employee/employee_create_view.dart';
 import 'package:maxwellengineering/views/products/productdetails.dart';
 
 class AddProduct extends StatefulWidget {
-  AddProduct({
+  const AddProduct({
     super.key,
     required this.close,
   });
@@ -56,7 +57,9 @@ class _AddProductState extends State<AddProduct> {
     });
 
     await _firestore.collection('products').add(addProductDatas);
-    print("Product added!");
+    if (kDebugMode) {
+      print("Product added!");
+    }
     setState(() {
       isLoading = false;
     });
@@ -74,11 +77,20 @@ class _AddProductState extends State<AddProduct> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: GestureDetector(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Products()));
-            },
-            child: Icon(Icons.view_agenda)),
+        leading: Column(
+          children: [
+            GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const Products()));
+                },
+                child: const Icon(Icons.view_agenda)),
+            GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const EmployeeCreateView()));
+                },
+                child: const Icon(Icons.person)),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -140,7 +152,7 @@ class _AddProductState extends State<AddProduct> {
                         ),
                         controller: mrp,
                         textAlign: TextAlign.start,
-                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')), // Allows double values
                         ],
@@ -162,7 +174,7 @@ class _AddProductState extends State<AddProduct> {
                         ),
                         controller: sellingPrice,
                         textAlign: TextAlign.start,
-                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')), // Allows double values
                         ],

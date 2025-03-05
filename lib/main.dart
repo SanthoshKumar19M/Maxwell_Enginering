@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:maxwellengineering/firebase_options.dart';
+import 'package:maxwellengineering/views/dashboard/dashboard.dart';
 import 'package:maxwellengineering/views/loginscreen/login_screen.dart';
+
+import 'utils/share_preferences_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -66,10 +69,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  @override
+  void initState() {
+    super.initState();
+    checkLoginStatus();
+  }
 
-  void _incrementCounter() {
-    FirebaseFirestore.instance.collection('test').add({'message': 'Firebase connected!'});
+  bool login = false;
+
+  Future<void> checkLoginStatus() async {
+    bool isLoggedIn = await SharedPrefsHelper.isLoggedIn();
+    if (isLoggedIn) {
+      setState(() {
+        login = true;
+      });
+    } else {
+      login = false;
+    }
   }
 
   @override
@@ -80,6 +96,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return LoginScreen();
+    return login ? const DashboardScreen() : const LoginScreen();
   }
 }
