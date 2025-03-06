@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:maxwellengineering/views/employee/employee_create_view.dart';
+import 'package:maxwellengineering/views/employee/employee_creation.dart';
 import 'package:maxwellengineering/views/products/productdetails.dart';
 
 class AddProduct extends StatefulWidget {
@@ -86,7 +86,7 @@ class _AddProductState extends State<AddProduct> {
                 child: const Icon(Icons.view_agenda)),
             GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const EmployeeCreateView()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const EmployeeCreation()));
                 },
                 child: const Icon(Icons.person)),
           ],

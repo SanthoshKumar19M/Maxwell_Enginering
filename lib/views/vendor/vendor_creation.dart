@@ -18,7 +18,7 @@ class VendorCreationState extends State<VendorCreation> with SingleTickerProvide
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _mailController = TextEditingController();
   final TextEditingController _mobileController = TextEditingController();
-  final TextEditingController _GSTController = TextEditingController();
+  final TextEditingController _gstController = TextEditingController();
   final TextEditingController billingAddressController = TextEditingController();
   final TextEditingController shippingAddressController = TextEditingController();
   final VendorController vendorController = VendorController();
@@ -36,7 +36,7 @@ class VendorCreationState extends State<VendorCreation> with SingleTickerProvide
           mobile: _mobileController.text,
           billingAddress: billingAddressController.text,
           shippingAddress: shippingAddressController.text,
-          gstNumber: _GSTController.text,
+          gstNumber: _gstController.text,
         ),
         context,
       );
@@ -46,7 +46,7 @@ class VendorCreationState extends State<VendorCreation> with SingleTickerProvide
       );
 
       _nameController.clear();
-      _GSTController.clear();
+      _gstController.clear();
       _mailController.clear();
       _mobileController.clear();
       billingAddressController.clear();
@@ -131,7 +131,7 @@ class VendorCreationState extends State<VendorCreation> with SingleTickerProvide
                               ),
                               const SizedBox(height: 10),
                               TextFormField(
-                                controller: _GSTController,
+                                controller: _gstController,
                                 decoration: InputDecorations.textFieldDecoration(
                                   labelText: "GST Number",
                                 ),

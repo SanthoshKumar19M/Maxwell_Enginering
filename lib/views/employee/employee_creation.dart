@@ -5,14 +5,14 @@ import '../../controllers/employee_controller.dart';
 import '../../models/employee_model.dart';
 import '../../utils/textformfield_decorattion.dart';
 
-class EmployeeCreateView extends StatefulWidget {
-  const EmployeeCreateView({super.key});
+class EmployeeCreation extends StatefulWidget {
+  const EmployeeCreation({super.key});
 
   @override
-  EmployeeCreateViewState createState() => EmployeeCreateViewState();
+  EmployeeCreationState createState() => EmployeeCreationState();
 }
 
-class EmployeeCreateViewState extends State<EmployeeCreateView> {
+class EmployeeCreationState extends State<EmployeeCreation> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _employeeIdController = TextEditingController();
