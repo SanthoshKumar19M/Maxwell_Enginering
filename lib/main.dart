@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:maxwellengineering/firebase_options.dart';
 import 'package:maxwellengineering/views/dashboard/dashboard.dart';
 import 'package:maxwellengineering/views/loginscreen/login_screen.dart';
-
 import 'utils/share_preferences_helper.dart';
 
 void main() async {
