@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:maxwellengineering/controllers/user_controller.dart';
 import 'package:maxwellengineering/controllers/vendor_controller.dart';
 import 'package:maxwellengineering/core/theme.dart';
+import 'package:maxwellengineering/models/user_role_model.dart';
 import 'package:maxwellengineering/models/vendor_model.dart';
 import '../../utils/textformfield_decorattion.dart';
 
@@ -21,7 +23,10 @@ class VendorCreationState extends State<VendorCreation> with SingleTickerProvide
   final TextEditingController _gstController = TextEditingController();
   final TextEditingController billingAddressController = TextEditingController();
   final TextEditingController shippingAddressController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController userNameController = TextEditingController();
   final VendorController vendorController = VendorController();
+  final UserController userController = UserController();
 
   Future<void> addVendor(BuildContext context) async {
     setState(() {
@@ -37,12 +42,21 @@ class VendorCreationState extends State<VendorCreation> with SingleTickerProvide
           billingAddress: billingAddressController.text,
           shippingAddress: shippingAddressController.text,
           gstNumber: _gstController.text,
+          userName: userNameController.text,
+          password: passwordController.text,
         ),
         context,
       );
-
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Vendor added successfully!')),
+      );
+      await userController.addUser(
+        UserModel(
+          userType: "vendor",
+          userName: userNameController.text,
+          password: passwordController.text,
+        ),
+        context,
       );
 
       _nameController.clear();
@@ -51,6 +65,8 @@ class VendorCreationState extends State<VendorCreation> with SingleTickerProvide
       _mobileController.clear();
       billingAddressController.clear();
       shippingAddressController.clear();
+      passwordController.clear();
+      userNameController.clear();
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error adding Vendor: $error')),
@@ -117,6 +133,37 @@ class VendorCreationState extends State<VendorCreation> with SingleTickerProvide
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
+                              const SizedBox(height: 10),
+                              TextFormField(
+                                controller: userNameController,
+                                decoration: InputDecorations.textFieldDecoration(
+                                  labelText: "User Name",
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return "Please enter a user namer";
+                                  }
+
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 10),
+                              TextFormField(
+                                controller: passwordController,
+                                decoration: InputDecorations.textFieldDecoration(
+                                  labelText: "Password",
+                                ),
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(6),
+                                ],
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return "Please enter an Password";
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 10),
                               TextFormField(
                                 controller: _nameController,
                                 decoration: InputDecorations.textFieldDecoration(
@@ -210,7 +257,6 @@ class VendorCreationState extends State<VendorCreation> with SingleTickerProvide
                                   return null;
                                 },
                               ),
-                              const SizedBox(height: 10),
                             ],
                           ),
                         ),
