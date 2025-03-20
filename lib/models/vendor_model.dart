@@ -7,6 +7,9 @@ class Vendor {
   String gstNumber;
   String billingAddress;
   String shippingAddress;
+  String userName;
+  String? userType = 'vendor';
+  String password;
 
   Vendor({
     required this.name,
@@ -16,6 +19,9 @@ class Vendor {
     required this.gstNumber,
     required this.billingAddress,
     required this.shippingAddress,
+    required this.userName,
+    this.userType,
+    required this.password,
   });
 
   // Convert Vendor to Map for Firestore
@@ -27,7 +33,9 @@ class Vendor {
       'mobile': mobile,
       'gstNumber': gstNumber,
       'billingAddress': billingAddress,
-      'shippingAddress': shippingAddress,
+      'userName': userName,
+      'userType': userType,
+      'password': password,
     };
   }
 
@@ -41,6 +49,9 @@ class Vendor {
       gstNumber: map['gstNumber'],
       billingAddress: map['billingAddress'],
       shippingAddress: map['shippingAddress'],
+      userName: map['userName'],
+      userType: map['userType'],
+      password: map['password'],
     );
   }
 }

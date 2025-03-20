@@ -4,7 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:maxwellengineering/models/user_role_model.dart';
 
+import '../../controllers/user_controller.dart';
 import '../../utils/share_preferences_helper.dart';
 import '../dashboard/dashboard.dart';
 
@@ -41,21 +43,49 @@ class _LoginScreenState extends State<LoginScreen> {
     User? user = _auth.currentUser;
     if (user != null) {
       String uid = user.uid;
-      String email = user.email ?? '';
-      String displayName = user.displayName ?? '';
+
       DateTime now = DateTime.now();
       String loginTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
 
       // Create or update user data in Firestore
       await _firestore.collection('users').doc(uid).set({
-        'email': email,
-        'displayName': displayName,
         'lastLogin': loginTime,
       }, SetOptions(merge: true)); // SetOptions(merge: true) allows updating fields without overwriting the whole document
     }
   }
 
+  final UserController userController = UserController();
+
   String? token;
+
+  void attemptLogin() async {
+    UserController userController = UserController();
+    // Trim email and password inputs
+    final userName = userNameController.text.trim();
+    final password = passwordController.text.trim();
+
+    // Check if userName and password are not empty
+    if (userName.isNotEmpty || password.isNotEmpty) {
+      UserModel? user = await userController.loginUser(userName, password, context);
+      if (user != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login successful')),
+        );
+        SharedPrefsHelper.saveLoginInfo(userName, password);
+        print('Login successful: ${user.userName}');
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DashboardScreen()));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login Un-Successful')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter your username and Password')),
+      );
+    }
+  }
+
   Future<void> _login() async {
     token = null;
     setState(() {
@@ -90,9 +120,10 @@ class _LoginScreenState extends State<LoginScreen> {
         if (kDebugMode) {
           print("Login successful. Token stored securely.");
         }
-        SharedPrefsHelper.saveLoginInfo(userName, password);
+
         setState(() {});
-        storeUserLoginDetails();
+
+        /// storeUserLoginDetails();
         Navigator.push(context, MaterialPageRoute(builder: (context) => const DashboardScreen()));
         setState(() {
           isLoading = false;
@@ -206,8 +237,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     inlinePadding(),
                                     TextFormField(
                                       decoration: InputDecoration(
-                                        label: const Text("EMAIL"),
-                                        prefixIcon: const Icon(Icons.email_outlined),
+                                        label: const Text("User name"),
+                                        prefixIcon: const Icon(Icons.person_2_outlined),
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(8.0),
                                         ),
@@ -222,12 +253,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                       textAlign: TextAlign.start,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'Please enter an email';
+                                          return 'Please enter an user name';
                                         }
-                                        final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$');
-                                        if (!emailRegExp.hasMatch(value)) {
-                                          return 'Enter a valid email';
-                                        }
+                                        // final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$');
+                                        // if (!emailRegExp.hasMatch(value)) {
+                                        //   return 'Enter a valid email';
+                                        // }
                                         return null;
                                       },
                                     ),
@@ -274,7 +305,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           child: ElevatedButton(
                                             onPressed: () {
                                               if (_formKey.currentState!.validate()) {
-                                                _login();
+                                                attemptLogin();
                                               }
                                             },
                                             style: ButtonStyle(
