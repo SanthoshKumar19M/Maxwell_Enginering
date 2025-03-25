@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:maxwellengineering/utils/share_preferences_helper.dart';
-import 'package:maxwellengineering/views/categories_master/category_creation.dart';
-import 'package:maxwellengineering/views/categories_master/category_view.dart';
-import 'package:maxwellengineering/views/employee/employee_view.dart';
-import 'package:maxwellengineering/views/tax_master/tax_creation.dart';
-import 'package:maxwellengineering/views/tax_master/tax_view.dart';
-import 'package:maxwellengineering/views/unit_master/unit_creation.dart';
-import 'package:maxwellengineering/views/unit_master/unit_view.dart';
-import 'package:maxwellengineering/views/vendor/vendor_creation.dart';
-import 'package:maxwellengineering/views/vendor/vendor_view.dart';
+import '../../utils/share_preferences_helper.dart';
+import '../../views/categories_master/category_creation.dart';
+import '../../views/categories_master/category_view.dart';
+import '../../views/employee/employee_view.dart';
+import '../../views/machine_screen/add_machine.dart';
+import '../../views/tax_master/tax_creation.dart';
+import '../../views/tax_master/tax_view.dart';
+import '../../views/unit_master/unit_creation.dart';
+import '../../views/unit_master/unit_view.dart';
+import '../../views/vendor/vendor_creation.dart';
+import '../../views/vendor/vendor_view.dart';
 
 import '../employee/employee_creation.dart';
 
@@ -51,6 +52,14 @@ class DashboardScreenState extends State<DashboardScreen> {
               title: const Text("Home"),
               onTap: () {
                 Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.precision_manufacturing_outlined),
+              title: const Text("machine entry"),
+              onTap: () {
+                // Navigate to settings
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MachineEntryScreen()));
               },
             ),
             ListTile(
