@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maxwellengineering/views/service_creation/service_creation.dart';
 import '../../utils/share_preferences_helper.dart';
 import '../../views/categories_master/category_creation.dart';
 import '../../views/categories_master/category_view.dart';
@@ -12,6 +13,7 @@ import '../../views/vendor/vendor_creation.dart';
 import '../../views/vendor/vendor_view.dart';
 
 import '../employee/employee_creation.dart';
+import '../service_creation/service_view.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -60,6 +62,22 @@ class DashboardScreenState extends State<DashboardScreen> {
               onTap: () {
                 // Navigate to settings
                 Navigator.push(context, MaterialPageRoute(builder: (context) => MachineEntryScreen()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text("Service"),
+              onTap: () {
+                // Navigate to settings
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ServiceCreation()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text("Service View"),
+              onTap: () {
+                // Navigate to settings
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ServiceList()));
               },
             ),
             ListTile(
@@ -154,7 +172,7 @@ class DashboardScreenState extends State<DashboardScreen> {
           Card(
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
-              child: Padding(
+              child: const Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -219,7 +237,8 @@ class DashboardScreenState extends State<DashboardScreen> {
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          DateTime.now().toString(),
+                          // DateTime.now().toString(),
+                          "25 Mar 2025",
                           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ],

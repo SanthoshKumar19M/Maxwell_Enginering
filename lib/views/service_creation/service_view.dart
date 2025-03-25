@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:maxwellengineering/controllers/vendor_controller.dart';
-import 'package:maxwellengineering/models/vendor_model.dart';
+import 'package:maxwellengineering/controllers/service_controller.dart';
+import 'package:maxwellengineering/models/service_model.dart';
 
-class VendorListScreen extends StatefulWidget {
-  const VendorListScreen({super.key});
+class ServiceList extends StatefulWidget {
+  const ServiceList({super.key});
 
   @override
-  VendorListScreenState createState() => VendorListScreenState();
+  ServiceListState createState() => ServiceListState();
 }
 
-class VendorListScreenState extends State<VendorListScreen> with SingleTickerProviderStateMixin {
-  late Future<List<Vendor>> _vendorFuture;
-  final VendorController vendorController = VendorController();
+class ServiceListState extends State<ServiceList> with SingleTickerProviderStateMixin {
+  late Future<List<Service>> _serviceFuture;
+  final ServiceController serviceController = ServiceController();
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
-  List<Vendor> _vendors = [];
+  List<Service> _services = [];
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
-  bool _listBuilt = false; // Add a flag
+  bool _listBuilt = false;
 
   @override
   void initState() {
     super.initState();
-    _loadVendors();
+    _loadServices();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -44,20 +44,20 @@ class VendorListScreenState extends State<VendorListScreen> with SingleTickerPro
     super.dispose();
   }
 
-  Future<void> _loadVendors() async {
-    _vendorFuture = vendorController.getAllVendors();
-    _vendorFuture.then((vendors) {
+  Future<void> _loadServices() async {
+    _serviceFuture = serviceController.getAllServices();
+    _serviceFuture.then((services) {
       if (mounted) {
         setState(() {
-          _vendors = vendors;
-          _listBuilt = true; // Set flag to true
+          _services = services;
+          _listBuilt = true;
         });
       }
     });
   }
 
   Widget _buildItem(BuildContext context, int index, Animation<double> animation) {
-    Vendor vendor = _vendors[index];
+    Service service = _services[index];
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(0, 0.5),
@@ -70,10 +70,14 @@ class VendorListScreenState extends State<VendorListScreen> with SingleTickerPro
           borderRadius: BorderRadius.circular(10),
         ),
         child: ListTile(
-          title: Text(vendor.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-          subtitle: Text("Vendor ID: ${vendor.vendorId}\nEmail: ${vendor.mail}"),
+          title: Text("Service No:  ${service.serviceNumber}", style: const TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text(
+            "Machine: ${service.machine}\nVendor: ${service.vendor} \nStatus: ${service.status}",
+          ),
           trailing: const Icon(Icons.arrow_forward_ios),
-          onTap: () {},
+          onTap: () {
+            // Navigate to service details page (implement navigation here)
+          },
         ),
       ),
     );
@@ -82,22 +86,22 @@ class VendorListScreenState extends State<VendorListScreen> with SingleTickerPro
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Vendor List')),
+      appBar: AppBar(title: const Text('Service List')),
       body: Stack(
         children: [
-          FutureBuilder<List<Vendor>>(
-            future: _vendorFuture,
+          FutureBuilder<List<Service>>(
+            future: _serviceFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text('No vendors found'));
+                return const Center(child: Text('No services found'));
               }
 
-              if (_vendors.isEmpty) {
-                return const Center(child: Text('No vendors found'));
+              if (_services.isEmpty) {
+                return const Center(child: Text('No services found'));
               }
 
               if (_listBuilt) {
@@ -105,17 +109,17 @@ class VendorListScreenState extends State<VendorListScreen> with SingleTickerPro
                   position: _slideAnimation,
                   child: AnimatedList(
                     key: _listKey,
-                    initialItemCount: _vendors.length,
+                    initialItemCount: _services.length,
                     itemBuilder: _buildItem,
                   ),
                 );
               } else {
-                return const Center(child: CircularProgressIndicator()); // show loading until the list is built.
+                return const Center(child: CircularProgressIndicator());
               }
             },
           ),
           AnimatedOpacity(
-            opacity: _vendors.isEmpty && _vendorFuture.toString() != "Instance of '_Future<List<Vendor>>'" ? 1.0 : 0.0,
+            opacity: _services.isEmpty ? 1.0 : 0.0,
             duration: const Duration(milliseconds: 300),
             child: const Center(
               child: CircularProgressIndicator(),
