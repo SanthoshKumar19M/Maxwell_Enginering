@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:maxwellengineering/views/service_creation/service_creation.dart';
+import 'package:maxwellengineering/views/service_creation/service_view.dart';
 import '../../utils/share_preferences_helper.dart';
 import '../../views/categories_master/category_creation.dart';
 import '../../views/categories_master/category_view.dart';
@@ -10,7 +12,6 @@ import '../../views/unit_master/unit_creation.dart';
 import '../../views/unit_master/unit_view.dart';
 import '../../views/vendor/vendor_creation.dart';
 import '../../views/vendor/vendor_view.dart';
-
 import '../employee/employee_creation.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -21,6 +22,13 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class DashboardScreenState extends State<DashboardScreen> {
+  // bool _reloadBody = false;
+  // void _refreshBody() {
+  //   setState(() {
+  //     _reloadBody = !_reloadBody;
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +48,18 @@ class DashboardScreenState extends State<DashboardScreen> {
           padding: EdgeInsets.zero,
           children: [
             UserAccountsDrawerHeader(
-              accountName: Text(SharedPrefsHelper.getUserId().toString()),
+              accountName: FutureBuilder<String?>(
+                future: SharedPrefsHelper.getUserId(), // Fetch the user ID asynchronously
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Text("Loading...");
+                  } else if (snapshot.hasError) {
+                    return const Text("Error fetching user");
+                  } else {
+                    return Text(snapshot.data ?? "No User ID");
+                  }
+                },
+              ),
               accountEmail: const Text("johndoe@example.com"),
               currentAccountPicture: const CircleAvatar(
                 backgroundColor: Colors.white,
@@ -50,25 +69,45 @@ class DashboardScreenState extends State<DashboardScreen> {
             ListTile(
               leading: const Icon(Icons.home),
               title: const Text("Home"),
-              onTap: () {
-                Navigator.pop(context);
-              },
+              onTap: () => Navigator.pop(context),
             ),
             ListTile(
               leading: const Icon(Icons.precision_manufacturing_outlined),
-              title: const Text("machine entry"),
-              onTap: () {
-                // Navigate to settings
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MachineEntryScreen()));
-              },
+              title: const Text("Machine Entry"),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MachineEntryScreen()),
+              ),
             ),
             ListTile(
               leading: const Icon(Icons.settings),
-              title: const Text("Settings"),
-              onTap: () {
-                // Navigate to settings
-              },
+              title: const Text("Service"),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ServiceCreation()),
+              ),
             ),
+            // ListTile(
+            //   leading: const Icon(Icons.settings),
+            //   title: const Text("Service"),
+            //   onTap: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => const ServiceCreation()),
+            //     ).then((_) {
+            //       _refreshBody(); // Refresh dashboard when returning
+            //     });
+            //   },
+            // ),
+
+            // ListTile(
+            //   leading: const Icon(Icons.build),
+            //   title: const Text("Service View"),
+            //   onTap: () => Navigator.push(
+            //     context,
+            //     MaterialPageRoute(builder: (context) => const ServiceList()),
+            //   ),
+            // ),
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text("Logout"),
@@ -77,160 +116,89 @@ class DashboardScreenState extends State<DashboardScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.home),
+              leading: const Icon(Icons.person),
               title: const Text("Employee"),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const EmployeeCreation()));
-              },
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const EmployeeCreation()),
+              ),
             ),
             ListTile(
-              leading: const Icon(Icons.home),
+              leading: const Icon(Icons.person_outline),
               title: const Text("Employee View"),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const EmployeeListScreen()));
-              },
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const EmployeeListScreen()),
+              ),
             ),
             ListTile(
-              leading: const Icon(Icons.home),
+              leading: const Icon(Icons.store),
               title: const Text("Vendor"),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const VendorCreation()));
-              },
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const VendorCreation()),
+              ),
             ),
             ListTile(
-              leading: const Icon(Icons.home),
+              leading: const Icon(Icons.store_mall_directory),
               title: const Text("Vendor View"),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const VendorListScreen()));
-              },
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const VendorListScreen()),
+              ),
             ),
             ListTile(
-              leading: const Icon(Icons.home),
+              leading: const Icon(Icons.money),
               title: const Text("Tax"),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const TaxCreation()));
-              },
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const TaxCreation()),
+              ),
             ),
             ListTile(
-              leading: const Icon(Icons.home),
+              leading: const Icon(Icons.money_off),
               title: const Text("Tax View"),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const TaxView()));
-              },
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const TaxView()),
+              ),
             ),
             ListTile(
-              leading: const Icon(Icons.home),
+              leading: const Icon(Icons.widgets),
               title: const Text("Unit"),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const UnitCreation()));
-              },
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const UnitCreation()),
+              ),
             ),
             ListTile(
-              leading: const Icon(Icons.home),
+              leading: const Icon(Icons.dashboard_customize),
               title: const Text("Unit View"),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const UnitView()));
-              },
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const UnitView()),
+              ),
             ),
             ListTile(
-              leading: const Icon(Icons.home),
+              leading: const Icon(Icons.category),
               title: const Text("Category"),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const CategoryCreation()));
-              },
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CategoryCreation()),
+              ),
             ),
             ListTile(
-              leading: const Icon(Icons.home),
+              leading: const Icon(Icons.category_outlined),
               title: const Text("Category View"),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const CategoryView()));
-              },
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CategoryView()),
+              ),
             ),
           ],
         ),
       ),
-      body: Column(
-        children: [
-          Card(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Service Details",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    const Divider(),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Machine NO ",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          "0011",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    const Divider(),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Service Incharge",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          "Sandy",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    const Divider(),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Status",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          "In - Progress",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    const Divider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Last Serviced At",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          DateTime.now().toString(),
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+      body: const ServiceList(),
     );
   }
 }
