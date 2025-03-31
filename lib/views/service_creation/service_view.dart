@@ -16,12 +16,12 @@ class ServiceListState extends State<ServiceList> with SingleTickerProviderState
   List<Service> _services = [];
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
-  bool _listBuilt = false;
 
   @override
   void initState() {
     super.initState();
-    _loadServices();
+    _serviceFuture = _loadServices(); // Load services on init
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -44,16 +44,8 @@ class ServiceListState extends State<ServiceList> with SingleTickerProviderState
     super.dispose();
   }
 
-  Future<void> _loadServices() async {
-    _serviceFuture = serviceController.getAllServices();
-    _serviceFuture.then((services) {
-      if (mounted) {
-        setState(() {
-          _services = services;
-          _listBuilt = true;
-        });
-      }
-    });
+  Future<List<Service>> _loadServices() async {
+    return await serviceController.getAllServices();
   }
 
   Widget _buildItem(BuildContext context, int index, Animation<double> animation) {
@@ -86,46 +78,28 @@ class ServiceListState extends State<ServiceList> with SingleTickerProviderState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Service List')),
-      body: Stack(
-        children: [
-          FutureBuilder<List<Service>>(
-            future: _serviceFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text('No services found'));
-              }
+      body: FutureBuilder<List<Service>>(
+        future: _serviceFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No services found'));
+          }
 
-              if (_services.isEmpty) {
-                return const Center(child: Text('No services found'));
-              }
+          _services = snapshot.data!;
 
-              if (_listBuilt) {
-                return SlideTransition(
-                  position: _slideAnimation,
-                  child: AnimatedList(
-                    key: _listKey,
-                    initialItemCount: _services.length,
-                    itemBuilder: _buildItem,
-                  ),
-                );
-              } else {
-                return const Center(child: CircularProgressIndicator());
-              }
-            },
-          ),
-          AnimatedOpacity(
-            opacity: _services.isEmpty ? 1.0 : 0.0,
-            duration: const Duration(milliseconds: 300),
-            child: const Center(
-              child: CircularProgressIndicator(),
+          return SlideTransition(
+            position: _slideAnimation,
+            child: AnimatedList(
+              key: _listKey,
+              initialItemCount: _services.length,
+              itemBuilder: _buildItem,
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }

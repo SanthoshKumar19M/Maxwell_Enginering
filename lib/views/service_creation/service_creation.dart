@@ -51,6 +51,8 @@ class ServiceCreationState extends State<ServiceCreation> with SingleTickerProvi
   }
 
   Future<void> addService(BuildContext context) async {
+    if (!_formKey.currentState!.validate()) return; // Validate form before proceeding
+
     setState(() {
       isLoading = true;
     });
@@ -73,16 +75,18 @@ class ServiceCreationState extends State<ServiceCreation> with SingleTickerProvi
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Service created successfully!')),
       );
-      // await userController.addUser(
-      //   UserModel(
-      //     userType: "vendor",
-      //     userName: userNameController.text,
-      //     password: passwordController.text,
-      //   ),
-      //   context,
-      // );
-
+      // ✅ **Clear all form values**
       serviceNumberController.clear();
+      vendorNameController.clear();
+      descriptionController.clear();
+      durationController.clear();
+      setState(() {
+        _selectedUser = null;
+        _selectedMachine = null;
+        _selectedStatus = "Not yet started";
+        _startedAt = null;
+        checkboxValues = List.filled(5, false); // Reset checkboxes
+      });
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error adding Service: $error')),

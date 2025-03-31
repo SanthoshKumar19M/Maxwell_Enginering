@@ -9,6 +9,8 @@ class Service {
   String status;
   DateTime startedAt;
   String description;
+  DateTime createdAt;
+  DateTime updatedAt;
 
   Service({
     required this.serviceNumber,
@@ -20,7 +22,10 @@ class Service {
     required this.status,
     required this.startedAt,
     required this.description,
-  });
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  })  : createdAt = createdAt ?? DateTime.now(),
+        updatedAt = updatedAt ?? DateTime.now();
 
   // Convert Service to Map for Firestore or API
   Map<String, dynamic> toMap() {
@@ -34,6 +39,8 @@ class Service {
       'status': status,
       'startedAt': startedAt.toIso8601String(),
       'description': description,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
     };
   }
 
@@ -49,6 +56,8 @@ class Service {
       status: map['status'],
       startedAt: DateTime.parse(map['startedAt']),
       description: map['description'],
+      createdAt: DateTime.parse(map['createdAt']),
+      updatedAt: DateTime.parse(map['updatedAt']),
     );
   }
 }

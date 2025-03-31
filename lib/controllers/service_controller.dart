@@ -12,7 +12,10 @@ class ServiceController {
     try {
       DocumentReference docRef = _serviceCollection.doc(); // Generate auto ID
       service.serviceId = docRef.id; // Store the auto ID in the Service object
-      await docRef.set(service.toMap()); // Save the Service with the ID
+      service.createdAt = DateTime.now(); // Set createdAt
+      service.updatedAt = DateTime.now(); // Set updatedAt
+
+      await docRef.set(service.toMap()); // Save the Service with timestamps
     } catch (e) {
       if (kDebugMode) {
         print('Error adding service: $e');
@@ -21,8 +24,9 @@ class ServiceController {
   }
 
   /// Update an existing service's data
-  Future<void> updateService(String serviceId, Map<String, dynamic> updatedData, BuildContext context) async {
+  Future<void> updateService(String serviceId, Map<String, dynamic> updatedData) async {
     try {
+      updatedData['updatedAt'] = DateTime.now().toIso8601String(); // Update timestamp
       await _serviceCollection.doc(serviceId).update(updatedData);
     } catch (e) {
       if (kDebugMode) {
